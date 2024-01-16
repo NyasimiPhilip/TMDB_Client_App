@@ -1,7 +1,7 @@
-package com.example.tmdb_client_app.data
+package com.example.tmdb_client_app.data.model.movie
 
 
-import com.example.tmdb_client_app.data.Movie
+import com.example.tmdb_client_app.data.model.movie.Movie
 import com.google.gson.annotations.SerializedName
 
 data class MovieList(

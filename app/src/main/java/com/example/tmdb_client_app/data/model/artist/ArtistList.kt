@@ -1,6 +1,7 @@
-package com.example.tmdb_client_app.data
+package com.example.tmdb_client_app.data.model.artist
 
 
+import com.example.tmdb_client_app.data.model.artist.Artist
 import com.google.gson.annotations.SerializedName
 
 data class ArtistList(

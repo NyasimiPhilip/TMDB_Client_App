@@ -1,8 +1,8 @@
 package com.example.tmdb_client_app.data.api
 
-import com.example.tmdb_client_app.data.ArtistList
-import com.example.tmdb_client_app.data.MovieList
-import com.example.tmdb_client_app.data.TvShowList
+import com.example.tmdb_client_app.data.model.artist.ArtistList
+import com.example.tmdb_client_app.data.model.movie.MovieList
+import com.example.tmdb_client_app.data.model.tvShow.TvShowList
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -29,6 +29,5 @@ interface TmDbInterface {
             "api_key"
         ) apiKey: String
     ): Response<TvShowList>
-
 
 }
