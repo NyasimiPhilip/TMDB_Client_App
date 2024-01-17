@@ -1,8 +1,11 @@
-package com.example.tmdb_client_app.data.repository
+package com.example.tmdb_client_app.data.repository.movie
 
 import android.util.Log
 import com.example.tmdb_client_app.data.model.movie.Movie
 import com.example.tmdb_client_app.data.model.movie.MovieList
+import com.example.tmdb_client_app.data.repository.movie.dataSource.MovieCacheDataSource
+import com.example.tmdb_client_app.data.repository.movie.dataSource.MovieLocalDataSource
+import com.example.tmdb_client_app.data.repository.movie.dataSource.MovieRemoteDatasource
 import com.example.tmdb_client_app.domain.repository.MovieRepository
 import retrofit2.Response
 
@@ -97,7 +100,7 @@ class MovieRepositoryImpl(
             // Log any exceptions that occur during cache operations
             Log.i("MyTag", exception.message.toString())
         }
-        if (movieList.size > 0) {
+        if (movieList.isNotEmpty()) {
             return movieList
         } else {
             // If no movies are found in the cache, fetch from API and save to the cache

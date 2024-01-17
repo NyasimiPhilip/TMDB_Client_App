@@ -7,7 +7,7 @@ data class Artist(
     @PrimaryKey
     @SerializedName("id")
     val id: Int,
-    //@ColumnInfo(name= "artist_name")to set custom column names
+    //@ColumnInfo(name= "artist_name")to set custom column namesggg
     @SerializedName("name")
     val name: String?,
     @SerializedName("popularity")
