@@ -23,18 +23,17 @@ class App : Application(), Injector {
             .netModule(NetModule(BuildConfig.BASE_URL))
             .remoteDataModule(RemoteDataModule(BuildConfig.API_KEY))
             .build()
-
     }
 
     override fun createMoviesSubComponent(): MovieSubComponent {
-        TODO("Not yet implemented")
+        return appComponent.movieSubComponent().create()
     }
 
     override fun createTvShowsSubComponent(): TvShowSubComponent {
-        TODO("Not yet implemented")
+        return appComponent.tvShowSubComponent().create()
     }
 
     override fun createArtistSubComponent(): ArtistSubComponent {
-        TODO("Not yet implemented")
+        return appComponent.artistSubComponent().create()
     }
 }
