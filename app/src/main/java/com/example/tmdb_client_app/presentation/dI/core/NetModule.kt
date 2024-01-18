@@ -1,4 +1,4 @@
-package com.example.tmdb_client_app.presentation.dI
+package com.example.tmdb_client_app.presentation.dI.core
 
 import com.example.tmdb_client_app.data.api.TMDBService
 import dagger.Module
