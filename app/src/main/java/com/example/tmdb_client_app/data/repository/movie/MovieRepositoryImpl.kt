@@ -5,7 +5,7 @@ import com.example.tmdb_client_app.data.model.movie.Movie
 import com.example.tmdb_client_app.data.model.movie.MovieList
 import com.example.tmdb_client_app.data.repository.movie.dataSource.MovieCacheDataSource
 import com.example.tmdb_client_app.data.repository.movie.dataSource.MovieLocalDataSource
-import com.example.tmdb_client_app.data.repository.movie.dataSource.MovieRemoteDatasource
+import com.example.tmdb_client_app.data.repository.movie.dataSource.MovieRemoteDataSource
 import com.example.tmdb_client_app.domain.repository.MovieRepository
 import retrofit2.Response
 
@@ -17,7 +17,7 @@ import retrofit2.Response
  * @property movieCacheDataSource Cache data source for movie-related operations.
  */
 class MovieRepositoryImpl(
-    private val movieRemoteDatasource: MovieRemoteDatasource,
+    private val movieRemoteDatasource: MovieRemoteDataSource,
     private val movieLocalDataSource: MovieLocalDataSource,
     private val movieCacheDataSource: MovieCacheDataSource
 ) : MovieRepository {

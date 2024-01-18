@@ -1,10 +1,10 @@
 package com.example.tmdb_client_app.data.repository.tvShow.dataSource
 
-import com.example.tmdb_client_app.data.model.artist.Artist
+import com.example.tmdb_client_app.data.model.tvShow.TvShow
 
 interface TvShowLocalDataSource {
 
-    suspend fun getArtistsFromDB(): List<Artist>
-    suspend fun saveArtistsToDB(artists: List<Artist>)
+    suspend fun getTvShowsFromDB(): List<TvShow>
+    suspend fun saveTvShowsToDB(artists: List<TvShow>)
     suspend fun clearAll()
 }
