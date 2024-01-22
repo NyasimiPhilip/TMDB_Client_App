@@ -6,6 +6,9 @@ import com.example.tmdb_client_app.presentation.artist.ArtistViewModelFactory
 import dagger.Module
 import dagger.Provides
 
+/**
+ * Dagger module for providing dependencies related to the Artist feature.
+ */
 @Module
 class ArtistModule {
 

@@ -8,7 +8,7 @@ import dagger.Subcomponent
  * Dagger Subcomponent for the Artist feature.
  */
 @ArtistScope
-@Subcomponent(modules = [MovieModule::class])
+@Subcomponent(modules = [ArtistModule::class])
 interface ArtistSubComponent {
 
     /**
