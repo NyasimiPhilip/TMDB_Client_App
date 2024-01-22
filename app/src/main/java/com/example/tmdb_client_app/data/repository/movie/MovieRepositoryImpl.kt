@@ -50,7 +50,7 @@ class MovieRepositoryImpl(
      * @return List of movies fetched from the API.
      */
     suspend fun getMoviesFromAPI(): List<Movie> {
-        lateinit var movieList: List<Movie>
+        var movieList: List<Movie> = emptyList()
         try {
             val response: Response<MovieList> = movieRemoteDatasource.getMovies()
             val body: MovieList? = response.body()
