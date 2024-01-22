@@ -1,6 +1,7 @@
 package com.example.tmdb_client_app.data.repository.tvShow
 
 import android.util.Log
+import com.example.tmdb_client_app.data.model.movie.Movie
 import com.example.tmdb_client_app.data.model.tvShow.TvShow
 import com.example.tmdb_client_app.data.model.tvShow.TvShowList
 import com.example.tmdb_client_app.data.repository.tvShow.dataSource.TvShowCacheDataSource
@@ -50,7 +51,7 @@ class TvShowRepositoryImpl(
      * @return List of TV shows fetched from the API.
      */
     suspend fun getTvShowsFromAPI(): List<TvShow> {
-        lateinit var tvShowList: List<TvShow>
+        var tvShowList: List<TvShow> = emptyList()
         try {
             val response: Response<TvShowList> = tvShowRemoteDatasource.getTvShows()
             val body: TvShowList? = response.body()

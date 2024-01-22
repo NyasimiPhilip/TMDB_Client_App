@@ -3,6 +3,7 @@ package com.example.tmdb_client_app.data.repository.artist
 import android.util.Log
 import com.example.tmdb_client_app.data.model.artist.Artist
 import com.example.tmdb_client_app.data.model.artist.ArtistList
+import com.example.tmdb_client_app.data.model.movie.Movie
 import com.example.tmdb_client_app.data.repository.artist.dataSource.ArtistCacheDataSource
 import com.example.tmdb_client_app.data.repository.artist.dataSource.ArtistLocalDataSource
 import com.example.tmdb_client_app.data.repository.artist.dataSource.ArtistRemoteDataSource
@@ -50,7 +51,7 @@ class ArtistRepositoryImpl(
      * @return List of artists fetched from the API.
      */
     suspend fun getArtistsFromAPI(): List<Artist> {
-        lateinit var artistList: List<Artist>
+        var artistList: List<Artist> = emptyList()
         try {
             val response: Response<ArtistList> = artistRemoteDataSource.getArtists()
             val body: ArtistList? = response.body()
