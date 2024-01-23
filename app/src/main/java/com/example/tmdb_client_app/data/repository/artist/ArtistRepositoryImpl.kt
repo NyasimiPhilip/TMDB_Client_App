@@ -24,12 +24,38 @@ class ArtistRepositoryImpl(
 ) : ArtistRepository {
 
     /**
-     * Retrieve artists from cache.
+     * Retrieve artists. If available in the cache, return from cache;
+     * otherwise, fetch from the local database and update the cache.
      *
-     * @return List of artists if available in the cache, otherwise null.
+     * @return List of artists if available in the cache or local database; otherwise, null.
      */
     override suspend fun getArtists(): List<Artist>? {
-        return getArtistsFromCache()
+        // Try to get artists from the cache
+        val artistsFromCache = getArtistsFromCache()
+
+        // If artists are available in the cache, return them
+        if (artistsFromCache.isNotEmpty()) {
+            return artistsFromCache
+        }
+
+        // Artists not available in the cache, try to get from the local database
+        val artistsFromDB = getArtistsFromDB()
+
+        // If artists are available in the local database, update the cache and return them
+        if (artistsFromDB.isNotEmpty()) {
+            artistCacheDataSource.saveArtistsToCache(artistsFromDB)
+            return artistsFromDB
+        }
+
+        // If artists are not available in the cache or local database, fetch from API
+        val newListOfArtists = getArtistsFromAPI()
+
+        // Save the fetched artists to the local database and cache
+        artistLocalDataSource.saveArtistsToDB(newListOfArtists)
+        artistCacheDataSource.saveArtistsToCache(newListOfArtists)
+
+        // Return the fetched artists
+        return newListOfArtists
     }
 
     /**

@@ -1,7 +1,6 @@
 package com.example.tmdb_client_app.data.repository.tvShow
 
 import android.util.Log
-import com.example.tmdb_client_app.data.model.movie.Movie
 import com.example.tmdb_client_app.data.model.tvShow.TvShow
 import com.example.tmdb_client_app.data.model.tvShow.TvShowList
 import com.example.tmdb_client_app.data.repository.tvShow.dataSource.TvShowCacheDataSource
@@ -13,23 +12,49 @@ import retrofit2.Response
 /**
  * Implementation of [TvShowRepository] interface for handling TV show-related data operations.
  *
- * @property tvShowRemoteDatasource Remote data source for TV show-related operations.
+ * @property tvShowRemoteDataSource Remote data source for TV show-related operations.
  * @property tvShowLocalDataSource Local data source for TV show-related operations.
  * @property tvShowCacheDataSource Cache data source for TV show-related operations.
  */
 class TvShowRepositoryImpl(
-    private val tvShowRemoteDatasource: TvShowRemoteDataSource,
+    private val tvShowRemoteDataSource: TvShowRemoteDataSource,
     private val tvShowLocalDataSource: TvShowLocalDataSource,
     private val tvShowCacheDataSource: TvShowCacheDataSource
 ) : TvShowRepository {
 
     /**
-     * Retrieve TV shows from cache.
+     * Retrieve TV shows. If available in the cache, return from cache;
+     * otherwise, fetch from the local database and update the cache.
      *
-     * @return List of TV shows if available in the cache, otherwise null.
+     * @return List of TV shows if available in the cache or local database; otherwise, null.
      */
     override suspend fun getTvShows(): List<TvShow>? {
-        return getTvShowsFromCache()
+        // Try to get TV shows from the cache
+        val tvShowsFromCache = getTvShowsFromCache()
+
+        // If TV shows are available in the cache, return them
+        if (tvShowsFromCache.isNotEmpty()) {
+            return tvShowsFromCache
+        }
+
+        // TV shows not available in the cache, try to get from the local database
+        val tvShowsFromDB = getTvShowsFromDB()
+
+        // If TV shows are available in the local database, update the cache and return them
+        if (tvShowsFromDB.isNotEmpty()) {
+            tvShowCacheDataSource.saveTvShowsToCache(tvShowsFromDB)
+            return tvShowsFromDB
+        }
+
+        // If TV shows are not available in the cache or local database, fetch from API
+        val newListOfTvShows = getTvShowsFromAPI()
+
+        // Save the fetched TV shows to the local database and cache
+        tvShowLocalDataSource.saveTvShowsToDB(newListOfTvShows)
+        tvShowCacheDataSource.saveTvShowsToCache(newListOfTvShows)
+
+        // Return the fetched TV shows
+        return newListOfTvShows
     }
 
     /**
@@ -53,7 +78,7 @@ class TvShowRepositoryImpl(
     suspend fun getTvShowsFromAPI(): List<TvShow> {
         var tvShowList: List<TvShow> = emptyList()
         try {
-            val response: Response<TvShowList> = tvShowRemoteDatasource.getTvShows()
+            val response: Response<TvShowList> = tvShowRemoteDataSource.getTvShows()
             val body: TvShowList? = response.body()
             if (body != null) {
                 tvShowList = body.tvShows

@@ -23,13 +23,40 @@ class MovieRepositoryImpl(
 ) : MovieRepository {
 
     /**
-     * Retrieve movies from cache.
+     * Retrieve movies. If available in the cache, return from cache;
+     * otherwise, fetch from the local database and update the cache.
      *
-     * @return List of movies if available in the cache, otherwise null.
+     * @return List of movies if available in the cache or local database; otherwise, null.
      */
     override suspend fun getMovies(): List<Movie>? {
-        return getMoviesFromCache()
+        // Try to get movies from the cache
+        val moviesFromCache = getMoviesFromCache()
+
+        // If movies are available in the cache, return them
+        if (moviesFromCache.isNotEmpty()) {
+            return moviesFromCache
+        }
+
+        // Movies not available in the cache, try to get from the local database
+        val moviesFromDB = getMoviesFromDB()
+
+        // If movies are available in the local database, update the cache and return them
+        if (moviesFromDB.isNotEmpty()) {
+            movieCacheDataSource.saveMoviesToCache(moviesFromDB)
+            return moviesFromDB
+        }
+
+        // If movies are not available in the cache or local database, fetch from API
+        val newListOfMovies = getMoviesFromAPI()
+
+        // Save the fetched movies to the local database and cache
+        movieLocalDataSource.saveMoviesToDB(newListOfMovies)
+        movieCacheDataSource.saveMoviesToCache(newListOfMovies)
+
+        // Return the fetched movies
+        return newListOfMovies
     }
+
 
     /**
      * Update movies by fetching new data from the API and saving it to local database and cache.
