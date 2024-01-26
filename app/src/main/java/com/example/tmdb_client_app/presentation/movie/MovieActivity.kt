@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tmdb_client_app.R
 import com.example.tmdb_client_app.data.model.movie.Movie
 import com.example.tmdb_client_app.databinding.ActivityMovieBinding
-import com.example.tmdb_client_app.presentation.dI.Injector
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 /**
@@ -28,13 +28,13 @@ import javax.inject.Inject
  * @property adapter Adapter for populating the RecyclerView with movie items.
  */
 
+@AndroidEntryPoint
 class MovieActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMovieBinding
     @Inject
     lateinit var factory: MovieViewModelFactory
     private lateinit var movieViewModel: MovieViewModel
     private lateinit var adapter: MovieAdapter
-
 
     /**
      * Initializes the activity, sets up data binding, and injects dependencies.
@@ -45,24 +45,17 @@ class MovieActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         // Initialize the binding object using the generated binding class
         binding = DataBindingUtil.setContentView(this, R.layout.activity_movie)
-        (application as Injector).createMoviesSubComponent()
-            .inject(this)
 
-
-        movieViewModel = ViewModelProvider(this, factory )[MovieViewModel::class.java]
+        // Dagger Hilt automatically injects the required dependencies when using @AndroidEntryPoint
+        movieViewModel = ViewModelProvider(this, factory).get(MovieViewModel::class.java)
 
         initRecyclerView()
-        /**
-         * val responseLiveData: LiveData<List<Movie>?> = movieViewModel.getMovies()
-        responseLiveData.observe(this, Observer {
-            Log.i("MYTAG", it.toString())
-        })
-         */
     }
+
     /**
      * Initializes the RecyclerView with the MovieAdapter.
      */
-    private fun initRecyclerView(){
+    private fun initRecyclerView() {
         binding.movieRecyclerView.layoutManager = LinearLayoutManager(this)
         adapter = MovieAdapter()
         binding.movieRecyclerView.adapter = adapter
@@ -72,20 +65,21 @@ class MovieActivity : AppCompatActivity() {
     /**
      * Displays a list of popular movies in the RecyclerView.
      */
-    private fun displayPopularMovies(){
+    private fun displayPopularMovies() {
         binding.movieProgressBar.visibility = View.VISIBLE
         val responseLiveData = movieViewModel.getMovies()
         responseLiveData.observe(this, Observer {
-            if(it!=null){
+            if (it != null) {
                 adapter.setList(it)
                 adapter.notifyDataSetChanged()
                 binding.movieProgressBar.visibility = View.GONE
-            }else{
+            } else {
                 binding.movieProgressBar.visibility = View.GONE
-                Toast.makeText(applicationContext,"No data available", Toast.LENGTH_LONG).show()
+                Toast.makeText(applicationContext, "No data available", Toast.LENGTH_LONG).show()
             }
         })
     }
+
     /**
      * Inflates the options menu for the activity.
      *
@@ -105,7 +99,7 @@ class MovieActivity : AppCompatActivity() {
      * @return True if the menu item is handled, false otherwise.
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId){
+        return when (item.itemId) {
             R.id.action_update -> {
                 updateMovies()
                 true
@@ -140,6 +134,7 @@ class MovieActivity : AppCompatActivity() {
         adapter.setList(updatedMovies)
         adapter.notifyDataSetChanged()
     }
+
     private fun handleNoDataToUpdate() {
         // Show a Toast message indicating that there are no updates available
         Toast.makeText(applicationContext, "No updates available", Toast.LENGTH_SHORT).show()

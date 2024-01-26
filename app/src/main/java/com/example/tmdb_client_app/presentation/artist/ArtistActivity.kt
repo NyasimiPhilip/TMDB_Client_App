@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tmdb_client_app.R
 import com.example.tmdb_client_app.data.model.artist.Artist
 import com.example.tmdb_client_app.databinding.ActivityArtistBinding
-import com.example.tmdb_client_app.presentation.dI.Injector
 import com.example.tmdb_client_app.presentation.movie.ArtistAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 /**
@@ -28,6 +28,7 @@ import javax.inject.Inject
  * @property artistViewModel ViewModel for managing artist-related data.
  * @property adapter Adapter for populating the RecyclerView with artist items.
  */
+@AndroidEntryPoint
 class ArtistActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityArtistBinding
@@ -39,8 +40,8 @@ class ArtistActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_artist)
-        (application as Injector).createArtistSubComponent().inject(this)
 
+        // Hilt automatically injects the required dependencies when using @AndroidEntryPoint
         artistViewModel = ViewModelProvider(this, factory)[ArtistViewModel::class.java]
 
         initRecyclerView()

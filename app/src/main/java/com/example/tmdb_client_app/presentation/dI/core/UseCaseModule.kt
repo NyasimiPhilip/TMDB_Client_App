@@ -11,7 +11,10 @@ import com.example.tmdb_client_app.domain.usecase.UpdateMoviesUseCase
 import com.example.tmdb_client_app.domain.usecase.UpdateTvShowsUseCase
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 
+@InstallIn(SingletonComponent::class)
 @Module
 class UseCaseModule {
 

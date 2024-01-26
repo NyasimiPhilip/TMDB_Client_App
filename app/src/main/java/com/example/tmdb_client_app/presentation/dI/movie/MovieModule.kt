@@ -5,29 +5,26 @@ import com.example.tmdb_client_app.domain.usecase.UpdateMoviesUseCase
 import com.example.tmdb_client_app.presentation.movie.MovieViewModelFactory
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
+import dagger.hilt.android.scopes.ActivityScoped
 
 /**
- * Dagger module for providing dependencies related to the Movie feature.
+ * Hilt module for providing dependencies related to the Movie feature.
  */
 @Module
+@InstallIn(ActivityComponent::class)
 class MovieModule {
-
-    /**
-     * Provides an instance of [MovieViewModelFactory] with the required dependencies.
-     *
-     * @param getMoviesUseCase The use case for retrieving movies.
-     * @param updateMovieUseCase The use case for updating movies.
-     * @return An instance of [MovieViewModelFactory] with the provided use cases.
-     */
+    @ActivityScoped
     @Provides
-    @MovieScope
     fun provideMovieViewModelFactory(
         getMoviesUseCase: GetMoviesUseCase,
-        updateMovieUseCase: UpdateMoviesUseCase
+        updateMoviesUseCase: UpdateMoviesUseCase
     ): MovieViewModelFactory {
         return MovieViewModelFactory(
             getMoviesUseCase,
-            updateMovieUseCase
+            updateMoviesUseCase
         )
     }
+
 }

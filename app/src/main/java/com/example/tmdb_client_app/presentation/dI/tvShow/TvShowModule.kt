@@ -5,26 +5,26 @@ import com.example.tmdb_client_app.domain.usecase.UpdateTvShowsUseCase
 import com.example.tmdb_client_app.presentation.tvShow.TvShowViewModelFactory
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
+import dagger.hilt.android.scopes.ActivityScoped
 
+/**
+ * Hilt module for providing dependencies related to the TV show feature.
+ */
 @Module
+@InstallIn(ActivityComponent::class)
 class TvShowModule {
-
-    /**
-     * Provides an instance of [TvShowViewModelFactory] with the required dependencies.
-     *
-     * @param getTvShowUseCase The use case for retrieving TV shows.
-     * @param updateTvShowUseCase The use case for updating TV shows.
-     * @return An instance of [TvShowViewModelFactory] with the provided use cases.
-     */
+    @ActivityScoped
     @Provides
-    @TvShowScope
     fun provideTvShowViewModelFactory(
-        getTvShowUseCase: GetTvShowsUseCase,
-        updateTvShowUseCase: UpdateTvShowsUseCase
+        getTvShowsUseCase: GetTvShowsUseCase,
+        updateTvShowsUseCase: UpdateTvShowsUseCase
     ): TvShowViewModelFactory {
         return TvShowViewModelFactory(
-            getTvShowUseCase,
-            updateTvShowUseCase
+            getTvShowsUseCase,
+            updateTvShowsUseCase
         )
     }
+
 }

@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tmdb_client_app.R
 import com.example.tmdb_client_app.data.model.tvShow.TvShow
 import com.example.tmdb_client_app.databinding.ActivityTvShowBinding
-import com.example.tmdb_client_app.presentation.dI.Injector
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 /**
@@ -27,6 +27,7 @@ import javax.inject.Inject
  * @property tvShowViewModel ViewModel for managing TV show-related data.
  * @property adapter Adapter for populating the RecyclerView with TV show items.
  */
+@AndroidEntryPoint
 class TvShowActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTvShowBinding
@@ -44,15 +45,12 @@ class TvShowActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         // Initialize the binding object using the generated binding class
         binding = DataBindingUtil.setContentView(this, R.layout.activity_tv_show)
-        (application as Injector).createTvShowsSubComponent()
-            .inject(this)
 
+        // Dagger Hilt automatically injects the required dependencies when using @AndroidEntryPoint
         tvShowViewModel = ViewModelProvider(this, factory)[TvShowViewModel::class.java]
 
         initRecyclerView()
     }
-
-
 
     /**
      * Initializes the RecyclerView with the TvShowAdapter.
@@ -139,7 +137,6 @@ class TvShowActivity : AppCompatActivity() {
 
     private fun handleNoDataToUpdate() {
         // Show a Toast message indicating that there are no updates available
-        Toast.makeText(applicationContext, "No updates available", Toast.LENGTH_SHORT).show()
-        // You can also log an error or take other appropriate actions based on your app's requirements
+        Toast.makeText(applicationContext, "No updates available", Toast.LENGTH_LONG).show()
     }
 }

@@ -1,5 +1,6 @@
 package com.example.tmdb_client_app.presentation.dI.core
 
+import android.app.Application
 import android.content.Context
 import androidx.room.Room
 import com.example.tmdb_client_app.data.db.ArtistDao
@@ -8,8 +9,11 @@ import com.example.tmdb_client_app.data.db.TMDBDatabase
 import com.example.tmdb_client_app.data.db.TvShowDao
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+@InstallIn(SingletonComponent::class)
 @Module
 class DataBaseModule {
 
@@ -21,7 +25,7 @@ class DataBaseModule {
      */
     @Provides
     @Singleton
-    fun provideMovieDataBase(context: Context): TMDBDatabase {
+    fun provideMovieDataBase(context: Application): TMDBDatabase {
         return Room.databaseBuilder(context, TMDBDatabase::class.java, "tmdbClient")
             //.fallbackToDestructiveMigration() // Handle migrations if needed, or use fallbackToDestructiveMigration() for simplicity
             .build()
